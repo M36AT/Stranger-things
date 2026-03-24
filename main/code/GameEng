@@ -1,1 +1,119 @@
+using System; // basic
 
+class GameController
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Enter your player name:");
+        string playerName = Console.ReadLine();
+
+        Player player = new Player(playerName);
+
+        // Start Level 1
+        Level level1 = new Level(1);
+        PlayLevel(player, level1);
+
+        // If player still alive → Level 2
+        if (player.Sanity > 0)
+        {
+            Level level2 = new Level(2);
+            PlayLevel(player, level2);
+        }
+
+        // End Game
+        if (player.Sanity > 0)
+        {
+            Console.WriteLine("\n🎉 Congratulations! You survived all levels!");
+        }
+        else
+        {
+            Console.WriteLine("\n💀 Game Over...");
+        }
+    }
+
+    static void PlayLevel(Player player, Level level)
+    {
+        level.StartLevel();
+
+        while (level.HasEnemiesRemaining() && player.Sanity > 0)
+        {
+            Enemy enemy = level.SpawnEnemy();
+            Console.WriteLine("\nA new enemy appears!");
+            enemy.DisplayInfo();
+
+            Battle(player, enemy);
+
+            if (player.Sanity > 0)
+            {
+                player.GainXP(50);
+            }
+        }
+
+        if (player.Sanity > 0)
+        {
+            level.CompleteLevel();
+        }
+    }
+
+    static void Battle(Player player, Enemy enemy)
+    {
+        while (enemy.IsAlive() && player.Sanity > 0)
+        {
+            int choice = player.ChooseAction();
+
+            switch (choice)
+            {
+                case 1: // Attack
+                    player.Attack(enemy);
+                    break;
+
+                case 2: // Special Ability
+                    player.SpecialAbility();
+                    break;
+
+                case 3: // Use Item
+                    player.UseItem();
+                    break;
+
+                case 4: // Check Status
+                    player.ShowStatus();
+                    continue;
+
+                case 5: // Show Inventory
+                    player.ShowInventory();
+                    continue;
+
+                default:
+                    Console.WriteLine("Invalid choice!");
+                    continue;
+            }
+
+            // Enemy turn
+            if (enemy.IsAlive())
+            {
+                Console.WriteLine("\nEnemy's turn!");
+
+                int damage;
+
+                // 30% chance special attack
+                Random rand = new Random();
+                if (rand.Next(100) < 30)
+                {
+                    damage = enemy.SpecialAttack();
+                }
+                else
+                {
+                    damage = enemy.Attack();
+                }
+
+                // Apply damage to player's sanity
+                player.TakeSanityDamage(damage);
+            }
+        }
+
+        if (!enemy.IsAlive())
+        {
+            Console.WriteLine("\n✅ Enemy defeated: " + enemy.GetName());
+        }
+    }
+}
