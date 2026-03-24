@@ -2,6 +2,8 @@ using System; // basic
 
 class GameController
 {
+    static Random rand = new Random();
+
     static void Main(string[] args)
     {
         Console.WriteLine("Enter your player name:");
@@ -9,25 +11,26 @@ class GameController
 
         Player player = new Player(playerName);
 
-        // Start Level 1
-        Level level1 = new Level(1);
-        PlayLevel(player, level1);
+        Console.WriteLine("\n🌌 Your journey into the unknown begins...\n");
 
-        // If player still alive → Level 2
-        if (player.Sanity > 0)
+        // Play Levels
+        for (int i = 1; i <= 2; i++)
         {
-            Level level2 = new Level(2);
-            PlayLevel(player, level2);
+            Level level = new Level(i);
+            PlayLevel(player, level);
+
+            if (player.Sanity <= 0)
+                break;
         }
 
         // End Game
         if (player.Sanity > 0)
         {
-            Console.WriteLine("\n🎉 Congratulations! You survived all levels!");
+            Console.WriteLine("\n🏆 You conquered all horrors and survived!");
         }
         else
         {
-            Console.WriteLine("\n💀 Game Over...");
+            Console.WriteLine("\n💀 You were consumed by the darkness...");
         }
     }
 
@@ -37,8 +40,11 @@ class GameController
 
         while (level.HasEnemiesRemaining() && player.Sanity > 0)
         {
+            level.ShowLevelProgress();
+
             Enemy enemy = level.SpawnEnemy();
-            Console.WriteLine("\nA new enemy appears!");
+
+            Console.WriteLine("\n⚠️ A new enemy appears!");
             enemy.DisplayInfo();
 
             Battle(player, enemy);
@@ -46,6 +52,7 @@ class GameController
             if (player.Sanity > 0)
             {
                 player.GainXP(50);
+                GiveRandomReward(player);
             }
         }
 
@@ -57,29 +64,38 @@ class GameController
 
     static void Battle(Player player, Enemy enemy)
     {
+        Console.WriteLine("\n⚔️ Battle Start!");
+
+        // Special intro for boss
+        if (enemy is Vecna vecna)
+        {
+            Console.WriteLine("\n👁️ Vecna has entered the battle...");
+            vecna.GrandfatherClockSequence();
+        }
+
         while (enemy.IsAlive() && player.Sanity > 0)
         {
             int choice = player.ChooseAction();
 
             switch (choice)
             {
-                case 1: // Attack
+                case 1:
                     player.Attack(enemy);
                     break;
 
-                case 2: // Special Ability
+                case 2:
                     player.SpecialAbility();
                     break;
 
-                case 3: // Use Item
+                case 3:
                     player.UseItem();
                     break;
 
-                case 4: // Check Status
+                case 4:
                     player.ShowStatus();
                     continue;
 
-                case 5: // Show Inventory
+                case 5:
                     player.ShowInventory();
                     continue;
 
@@ -88,25 +104,47 @@ class GameController
                     continue;
             }
 
-            // Enemy turn
+            // Enemy Turn
             if (enemy.IsAlive())
             {
-                Console.WriteLine("\nEnemy's turn!");
+                Console.WriteLine("\n👿 Enemy's turn!");
 
                 int damage;
 
-                // 30% chance special attack
-                Random rand = new Random();
-                if (rand.Next(100) < 30)
+                // Boss logic
+                if (enemy is Vecna boss)
                 {
-                    damage = enemy.SpecialAttack();
+                    if (rand.Next(100) < 50)
+                    {
+                        damage = boss.SpecialAttack();
+                    }
+                    else
+                    {
+                        damage = boss.Attack();
+                    }
+
+                    // Extra psychological attack
+                    int sp = player.Sanity;
+                    int hp = player.Sanity;
+
+                    boss.PsychologicalAttack(ref sp, ref hp);
+
+                    // update player after modification
+                    player.Sanity = sp;
                 }
                 else
                 {
-                    damage = enemy.Attack();
+                    // Normal enemies
+                    if (rand.Next(100) < 30)
+                    {
+                        damage = enemy.SpecialAttack();
+                    }
+                    else
+                    {
+                        damage = enemy.Attack();
+                    }
                 }
 
-                // Apply damage to player's sanity
                 player.TakeSanityDamage(damage);
             }
         }
@@ -114,6 +152,22 @@ class GameController
         if (!enemy.IsAlive())
         {
             Console.WriteLine("\n✅ Enemy defeated: " + enemy.GetName());
+
+            // Boss victory scene
+            if (enemy is Vecna boss)
+            {
+                boss.VictorySequence();
+            }
         }
+    }
+
+    static void GiveRandomReward(Player player)
+    {
+        Console.WriteLine("\n🎁 You found an item!");
+
+        string[] rewards = { "Health Potion", "Sanity Potion" };
+        string item = rewards[rand.Next(rewards.Length)];
+
+        player.AddItem(item);
     }
 }
