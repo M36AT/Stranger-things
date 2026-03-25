@@ -2,6 +2,9 @@ using System;
 
 class MenuSystem
 {
+    static Difficulty currentDifficulty;  // Difficulty file
+    static LevelSystem currentLevel;       // LevelSystem file
+
     public void ShowMainMenu()
     {
         Console.Clear();
@@ -18,7 +21,23 @@ class MenuSystem
         Console.WriteLine("║    [3] Exit                            ║");
         Console.WriteLine("║                                        ║");
         Console.WriteLine("╚════════════════════════════════════════╝");
-        Console.Write("\nChoose an option: ");
+        Console.Write("\n> ");
+        
+        string choice = Console.ReadLine();
+
+        if (choice == "1")
+        {
+            ShowDifficultyMenu();
+        }
+        else if (choice == "2")
+        {
+            ShowInstructions();
+        }
+        else if (choice == "3")
+        {
+            Console.WriteLine("\nSee you again!");
+            return;
+        }
     }
     
     public void ShowInstructions()
@@ -40,6 +59,7 @@ class MenuSystem
         Console.WriteLine("╚════════════════════════════════════════╝");
         Console.WriteLine("\nPress any key to return to main menu...");
         Console.ReadKey();
+        ShowMainMenu();
     }
     
     public void ShowDifficultyMenu()
@@ -64,6 +84,48 @@ class MenuSystem
         Console.WriteLine("║        Only for the fearless           ║");
         Console.WriteLine("║                                        ║");
         Console.WriteLine("╚════════════════════════════════════════╝");
-        Console.Write("\nChoose difficulty (1-4): ");
+        Console.Write("\n> ");
+        
+        string difficultyChoice = Console.ReadLine();
+
+        // Difficulty.cs
+        if (difficultyChoice == "1")
+        {
+            currentDifficulty = new Difficulty("Easy");
+        }
+        else if (difficultyChoice == "2")
+        {
+            currentDifficulty = new Difficulty("Normal");
+        }
+        else if (difficultyChoice == "3")
+        {
+            currentDifficulty = new Difficulty("Hard");
+        }
+        else if (difficultyChoice == "4")
+        {
+            currentDifficulty = new Difficulty("Nightmare");
+        }
+
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        Console.Clear();
+        Console.WriteLine("╔════════════════════════════════════════╗");
+        Console.WriteLine("║           GAME STARTING...             ║");
+        Console.WriteLine("╚════════════════════════════════════════╝");
+        s
+        // connect to Difficulty.cs
+        Console.WriteLine($"\nDifficulty: {currentDifficulty.GetDifficultyLevel()}");
+        
+        // connect to LevelSystem.cs
+        currentLevel = new LevelSystem(1);  // Start at level 1
+        currentLevel.StartLevel();
+        
+        Console.WriteLine("\nThe Upside Realm awaits...");
+        Console.WriteLine("\nPress any key to return to main menu...");
+        Console.ReadKey();
+        ShowMainMenu();
     }
 }
