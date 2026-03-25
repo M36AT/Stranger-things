@@ -1,1 +1,69 @@
+using System;
 
+class MenuSystem
+{
+    public void ShowMainMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("╔════════════════════════════════════════╗");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║           THE UPSIDE REALM             ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║         Enter the nightmare...         ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("╠════════════════════════════════════════╣");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║    [1] Start Game                      ║");
+        Console.WriteLine("║    [2] Instructions                    ║");
+        Console.WriteLine("║    [3] Exit                            ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("╚════════════════════════════════════════╝");
+        Console.Write("\nChoose an option: ");
+    }
+    
+    public void ShowInstructions()
+    {
+        Console.Clear();
+        Console.WriteLine("╔════════════════════════════════════════╗");
+        Console.WriteLine("║              INSTRUCTIONS              ║");
+        Console.WriteLine("╠════════════════════════════════════════╣");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║  HP = HEALTH POINTS                    ║");
+        Console.WriteLine("║     • Reaches 0 → Physical death       ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║  SP = SANITY POINTS                    ║");
+        Console.WriteLine("║     • Reaches 0 → Mind is lost         ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║  Make your choices to survive...       ║");
+        Console.WriteLine("║  Keep both stats above 0 to win.       ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("╚════════════════════════════════════════╝");
+        Console.WriteLine("\nPress any key to return to main menu...");
+        Console.ReadKey();
+    }
+    
+    public void ShowDifficultyMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("╔════════════════════════════════════════╗");
+        Console.WriteLine("║           SELECT DIFFICULTY            ║");
+        Console.WriteLine("╠════════════════════════════════════════╣");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║    [1] EASY                            ║");
+        Console.WriteLine("║        Lower enemy damage              ║");
+        Console.WriteLine("║        More rewards                    ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║    [2] NORMAL                          ║");
+        Console.WriteLine("║        Balanced experience             ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║    [3] HARD                            ║");
+        Console.WriteLine("║        Stronger enemies                ║");
+        Console.WriteLine("║        Less rewards                    ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("║    [4] NIGHTMARE                       ║");
+        Console.WriteLine("║        Only for the fearless           ║");
+        Console.WriteLine("║                                        ║");
+        Console.WriteLine("╚════════════════════════════════════════╝");
+        Console.Write("\nChoose difficulty (1-4): ");
+    }
+}
