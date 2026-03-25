@@ -4,6 +4,7 @@ class Player
     private string name;
     private int sanity;
     private int xp;
+    private int health;
     private int level;
     private Inventory inventory;
     
@@ -22,6 +23,17 @@ class Player
             sanity = value;
             if (sanity < 0) sanity = 0;
             if (sanity > 100) sanity = 100;
+        }
+    }
+
+   public int Sanity
+    {
+        get { return health; }
+        set 
+        { 
+            health = value;
+            if (health < 0) health = 0;
+            if (health > 100) health = 100;
         }
     }
     
@@ -49,12 +61,27 @@ class Player
         get { return inventory; }
         set { inventory = value; }
     }
+
+   private Difficulty difficulty;
+
+   public Player(string playerName, Difficulty difficulty)
+   {
+       name = playerName;
+       this.difficulty = difficulty;
+   
+       sanity = 100 + difficulty.PlayerSanityModifier;
+   
+       xp = 0;
+       level = 1;
+       inventory = new Inventory();
+   }
     
     
     public Player(string playerName)
     {
         name = playerName;
         sanity = 100;
+        health = 100;
         xp = 0;
         level = 1;
         inventory = new Inventory(); // Creates inventory object
