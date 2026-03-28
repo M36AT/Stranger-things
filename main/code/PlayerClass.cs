@@ -211,3 +211,165 @@ class Player
         inventory.AddItem(item);
     }
 }
+
+
+// Player Subclass
+
+// Player: Eleven
+class Eleven : Player
+{
+int psychic power;
+public Eleven(string name) : base(name)
+{
+psychicPower = 50;
+Console.WriteLine(" Eleven is the Psychic ");
+Console.WriteLine("Special Ability is Mind Power");
+Console.WriteLine("Elevens psychic power: "+ psychicPower);
+}
+
+public override void SpecialAbility()
+    {
+        if (psychicPower >= 25)
+        {
+            Console.WriteLine( Name + " fires a mind power! ");
+            Console.WriteLine("Deals 60 massive damage!");
+            psychicPower -= 25;
+            Console.WriteLine("Psychic power drop to: " + psychicPower);
+        }
+        else
+        {
+            Console.WriteLine("\nNot enough power! Need at least 25, we have :" + psychicPower);
+        }
+    }
+    
+    public override void LevelUp()
+    {
+        base.LevelUp();
+        psychicPower += 15;
+        Console.WriteLine(" Psychic power level up  to  " + psychicPower);
+    }
+    
+    public override void Attack(Enemy target)
+    {
+        int psychicDamage = 20 + (Level * 2) + (psychicPower / 10);
+        Console.WriteLine(Name + " attack on  " + target.Name + "!");
+        Console.WriteLine("Deals " + psychicDamage + " damage!");
+        target.TakeDamage(psychicDamage);
+    }
+    
+    public void ShowPsychicStatus()
+    {
+        Console.WriteLine("\nPsychic Power : " + psychicPower + "/100");
+    }
+}
+
+//Player: Steve
+class Steve : Player
+{
+    private int batDurability;
+    
+    public Steve(string name) : base(name)
+    {
+        batDurability = 100;
+        Console.WriteLine(" Steve The Protector ");
+        Console.WriteLine("Special Ability is Defensive Power");
+        Console.WriteLine("Bat Durability: " + batDurability + "%");
+    }
+    
+    public override void SpecialAbility()
+    {
+        Console.WriteLine( Name +"DEFENSE!");
+        Console.WriteLine("Damage reduced by 50% for 3 turns!");
+    }
+    
+    public override void LevelUp()
+    {
+        base.LevelUp();
+        batDurability = Math.Min(100, batDurability + 30);
+        Console.WriteLine(" Bat have been repaired! Durability: " + batDurability + "%");
+    }
+    
+    public override void Attack(Enemy target)
+    {
+        if (batDurability <= 0)
+        {
+            Console.WriteLine("\n Bat is broken! Using fists!");
+            int fistDamage = 8 + Level;
+            Console.WriteLine(Name + " punch " + target.Name + " for " + fistDamage + " damage!");
+            target.TakeDamage(fistDamage);
+            return;
+        }
+        
+        int batDamage = 15 + (Level * 2);
+        Console.WriteLine( Name + " attack the bat towards " + target.Name + "!");
+        Console.WriteLine("The attack deals " + batDamage + " damage!");
+        target.TakeDamage(batDamage);
+        
+        batDurability -= 8;
+        Console.WriteLine("Bat durability: " + batDurability + "%");
+    }
+    
+    public void ShowProtectorStatus()
+    {
+        Console.WriteLine("\nBat Durability: " + batDurability + "%");
+    }
+}
+
+// Player : Dustin
+class Dustin : Player
+{
+    private int intelligence;
+    private bool hasAnalyzed;
+    
+    public Dustin(string name) : base(name)
+    {
+        intelligence = 50;
+        hasAnalyzed = false;
+        Console.WriteLine(" Dustin The MasterMind");
+        Console.WriteLine("Special Ability is Analyze Enemy");
+        Console.WriteLine("Intelligence: " + intelligence);
+    }
+    
+    public override void SpecialAbility()
+    {
+        Console.WriteLine( Name + " analyzes the enemy!");
+        Console.WriteLine("Enemy weakness have been  revealed!");
+        intelligence += 5;
+        hasAnalyzed = true;
+        Console.WriteLine("Intelligence power has increased to: " + intelligence);
+    }
+    
+    public override void LevelUp()
+    {
+        base.LevelUp();
+        intelligence += 15;
+        Console.WriteLine(" Intelligence power increased to: " + intelligence);
+    }
+    
+    public override void Attack(Enemy target)
+    {
+        int gadgetDamage = 12 + (Level * 2) + (intelligence / 10);
+        
+        if (hasAnalyzed)
+        {
+            gadgetDamage += 15;
+            Console.WriteLine("\n Using enemy weakness!");
+            hasAnalyzed = false;
+        }
+        
+        Console.WriteLine( Name + " use the gadget on " + target.Name + "!");
+        Console.WriteLine("The attack deals " + gadgetDamage + " damage!");
+        target.TakeDamage(gadgetDamage);
+    }
+    
+    public void ShowStrategistStatus()
+    {
+        Console.WriteLine("\nIntelligence: " + intelligence + "/100");
+        Console.WriteLine("Weakness Known: " + (hasAnalyzed ? "Yes" : "No"));
+    }
+}
+
+
+
+
+
